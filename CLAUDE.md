@@ -34,7 +34,10 @@ is Triplot's; the readers, units, analyses and decorators are IR's own.
    said as one wherever the unit is shown; the user can tell it
    (`Sample.unit_override`). Normalisation IS allowed for IR (unlike DSC)
    - all the spectra together, 0 to 1, is where a figure starts - but the
-   y caption says "(normalised)" whenever it is on.
+   y caption says "(normalised)" whenever it is on - the automatic
+   one. A caption the user TYPED is theirs and is never stamped over
+   (the "NORMALISED, and the y caption does not say so" stamp went on
+   2026-10-05, his word).
 5. **Python is exactly 3.10.0** (`C:\Program Files\Python310`). No `X | Y`
    annotations, no match statements.
 6. **No em-dashes, ASCII in source.** A plain `-`. PowerShell 5.1 reads a
@@ -81,6 +84,14 @@ is Triplot's; the readers, units, analyses and decorators are IR's own.
 | `ui/settings.py`, `ui/appearance.py`, `ui/colour.py`, `ui/numbox.py`, `ui/outliner.py`, `ui/palette.py`, `ui/loading.py` | as in Triplot |
 
 ## Traps paid for here
+
+* **A settings window's rows are ORDERED, not built in order**
+  (2026-10-05, family-wide): `_LiveDialog.FIRST_ROWS` / `LAST_ROWS` (or
+  `row_order()`, which `LabelSettings` overrides per kind) name rows by
+  label or "@attribute"; `_buttons` - every window's last call - moves
+  them (`order_rows`). A new row joins its window's list, or it lands in
+  the middle. The widgets are moved, not rebuilt: hiding a row means its
+  field AND `labelForField`.
 
 * **The x axis is reversed, and may be broken: map through the widget,
   always.** `PlotWidget.x_to_px` / `px_to_x` go through `warp_x` /

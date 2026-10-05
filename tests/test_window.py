@@ -483,23 +483,58 @@ def test_a_region_says_several_lines(window):
     dialog.close()
 
 
-def test_all_together_from_the_canvas_and_f3(window):
-    """A tick on the empty plot's right-click menu turns "all together,
-    0 to 1" on and off; F3 has it and "each 0 to 1" beside it."""
-    assert window.ops.get("view.norm_global") is not None
-    assert window.ops.get("view.norm_range") is not None
-    window.set_display(norm=units.NORM_NONE)
-    menu = window.context_menu_for(None)
-    [tick] = [a for a in menu.actions() if a.text().startswith(
-        "Normalise all spectra together")]
-    assert tick.isCheckable() and not tick.isChecked()
-    tick.trigger()
-    assert window.doc.norm == units.NORM_GLOBAL
-    menu = window.context_menu_for(None)
-    [tick] = [a for a in menu.actions() if a.text().startswith(
-        "Normalise all spectra together")]
-    assert tick.isChecked()
-    tick.trigger()
-    assert window.doc.norm == units.NORM_NONE
-    assert window.run_op("view.norm_range")
-    assert window.doc.norm == units.NORM_RANGE
+def test_the_plots_normalise_menu_has_all_four(window):
+    """The empty plot's right-click "Normalise": none, individual,
+    global, or to a band - the one in force ticked, each choice one undo
+    step. F3 has them too."""
+    for op_id in ("view.norm_none", "view.norm_range", "view.norm_global",
+                  "view.norm_band"):
+        assert window.ops.get(op_id) is not None
+    window.ask_wavenumbers = lambda title, text="": (1600.0, 1700.0)
+
+    def entries():
+        menu = window.context_menu_for(None)
+        sub = menu._norm
+        assert sub.title() == "Normalise"
+        return menu, [a for a in sub.actions() if not a.isSeparator()]
+
+    _menu, actions = entries()
+    assert [a.text() for a in actions][0] == "None"
+    assert actions[-1].text() == "To a band..."
+    wanted = (units.NORM_RANGE, units.NORM_GLOBAL, units.NORM_BAND,
+              units.NORM_NONE)
+    for index, norm in zip((1, 2, 3, 0), wanted):
+        before = window.doc.norm
+        _menu, actions = entries()
+        actions[index].trigger()
+        assert window.doc.norm == norm
+        _menu, actions = entries()
+        assert [a.isChecked() for a in actions].count(True) == 1
+        assert actions[index].isChecked()
+        if norm != before:
+            window.undo_step()
+            assert window.doc.norm == before
+            window.redo_step()
+            assert window.doc.norm == norm
+
+
+def test_the_y_captions_window_changes_the_unit(window):
+    """Double-click the y caption: "Shows" transmittance or absorbance,
+    one undo step (the window's); the x caption has nothing to choose."""
+    from irpanel.ui.dialogs import CaptionSettings
+    axis = window.doc.axes["y"]
+    window.edit_object(axis, part="caption")
+    dialog = window._dialogs[-1]
+    assert isinstance(dialog, CaptionSettings)
+    box = dialog.quantity
+    assert [box.itemData(i) for i in range(box.count())] == list(units.UNITS)
+    other = [u for u in units.UNITS if u != window.doc.y_unit][0]
+    before = window.doc.y_unit
+    box.setCurrentIndex(box.findData(other))
+    assert window.doc.y_unit == other
+    dialog.close()
+    window.undo_step()
+    assert window.doc.y_unit == before
+    window.edit_object(window.doc.axes["x"], part="caption")
+    assert window._dialogs[-1].quantity is None
+    window._dialogs[-1].close()

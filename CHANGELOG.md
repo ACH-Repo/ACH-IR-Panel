@@ -2,6 +2,27 @@
 
 ## Unreleased
 
+- Settings windows in an order you can work down: the text first, then
+  the colour, then what only the window can set (a marker line's
+  position, a note's point and arrow, a region's stretch), then sizes and
+  style; Show and Layer at the bottom.
+- A band marker's (marker line's) window has no arrow rows any more: they
+  belonged to notes. A label's arrow rows appear only once "Leader
+  arrow" makes it a note.
+- A region's list of curves to magnify shows only once it magnifies (a
+  factor other than 1); a plain highlight has none to choose.
+
+- No more "NORMALISED, and the y caption does not say so" stamped on the
+  figure when you type your own y caption: what you type is yours.
+
+- The plot's right-click menu has a Normalise submenu with all four
+  choices - None, Individual (each spectrum 0 to 1), Global (all together,
+  0 to 1) and To a band... - the one in force ticked. It replaces the
+  single "all together" tick.
+- Double-click the y caption: "Shows" changes what the axis shows
+  (transmittance or absorbance), one undo step. A caption you typed yourself stays as typed,
+  and the window says so.
+
 ## 0.2.0 (2026-10-02)
 
 - On a white page (and in every export) a colour you picked is drawn

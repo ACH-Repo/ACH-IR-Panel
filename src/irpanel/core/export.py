@@ -5,9 +5,9 @@
 * `warnings_for` - what an export must not be allowed to hide. A figure drawn
   while a spectrum could not be drawn at all - recorded as something that is
   neither transmittance nor absorbance, or short of the normalisation band -
-  misleads unless it says so, and so does a normalised axis whose caption
-  was retyped without saying it. These lines are printed AND stamped into
-  the image.
+  misleads unless it says so. These lines are printed AND stamped into the
+  image. A caption the user typed is theirs: nothing is stamped about what
+  it says (Christian, 2026-10-05).
 * `notes_for` - what is worth knowing and is not wrong: a unit guessed from
   the data, a label's number typed by hand. Printed, not stamped.
 
@@ -28,10 +28,6 @@ def warnings_for(doc):
     for scan, missing in doc.scans_missing():
         out.append("NO {}: {} is not drawn".format(missing.upper(),
                                                    scan.display_name()))
-    if doc.norm != units.NORM_NONE:
-        own = doc.axes["y"].label
-        if own and "normal" not in str(own).lower():
-            out.append("NORMALISED, and the y caption does not say so")
     return out
 
 

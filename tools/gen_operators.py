@@ -27,7 +27,7 @@ NOTES = {
     "measure.start": "the typed route; double-click-drag a curve is the quick one",
     "view.unit_t": "converted, A = -log10 T; the analyses always run on A",
     "view.unit_a": "converted, A = -log10 T; the analyses always run on A",
-    "view.norm_global": "lowest of all on show 0, highest 1; also the plot's right-click",
+    "view.norm_global": "lowest of all on show 0, highest 1; also the plot's right-click, Normalise",
     "label.add": "on selected curves: their names, nothing asked",
     "view.norm_band": "the band dragged is 1, the offsets keep their places",
     "view.break": "or drag along a curve and pick Break from the list",

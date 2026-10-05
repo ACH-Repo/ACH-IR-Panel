@@ -121,7 +121,7 @@ This file is GENERATED. After adding an operator, run:
 | Y axis: Transmittance (%) |  | the y axis shows the other | converted, A = -log10 T; the analyses always run on A |
 | Y axis: Absorbance |  | the y axis shows the other | converted, A = -log10 T; the analyses always run on A |
 | Do not normalise |  | the spectra are normalised |  |
-| Normalise all spectra together, 0 to 1 |  | they are not normalised together | lowest of all on show 0, highest 1; also the plot's right-click |
+| Normalise all spectra together, 0 to 1 |  | they are not normalised together | lowest of all on show 0, highest 1; also the plot's right-click, Normalise |
 | Normalise each spectrum 0 to 1 |  | they are not normalised 0 to 1 |  |
 | Normalise each spectrum to a band... |  | a spectrum is open | the band dragged is 1, the offsets keep their places |
 | Break the x axis... |  | a spectrum is open | or drag along a curve and pick Break from the list |

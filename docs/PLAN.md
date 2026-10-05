@@ -110,6 +110,52 @@ Christian: why a yellow came out olive on a white page. On a white page
 whole family. (The selective swipe and "xN" factors he asked for in the
 same message went to PXRD-Panel only.)
 
+## Round 5 (2026-10-05): a Normalise submenu, units from the caption
+
+Christian: the normalise options should open like Background, into all
+four choices; and an axis's unit should change by double-clicking its
+caption. For IR-Panel and PXRD-Panel; Triplot's unit changes wait (time
+axes, /mol, the second y axis - his "own can of worms").
+
+* `MainWindow.norm_menu` (`NORM_CHOICES`): None, Individual, Global, To
+  a band...; exclusive, the one in force ticked, each `set_display`'s
+  one undo step. The single "all together" tick is gone.
+* `CaptionSettings`: a "Shows" row where the axis can show something else
+  - `MainWindow.axis_choices(axis)` lists it, `set_axis_shows` does it
+  through the window (`set_display(unit=)`), its own undo step, never the dialog's
+  snapshot. A typed caption does not follow; an orange line says so.
+* He reported that the normalisation could not be undone with Ctrl+Z
+  (IR). Not reproduced: the tick from the right-click menu and a real
+  Ctrl+Z through the window's handle both undid it, curves and y range.
+  The new test undoes and redoes every entry of the submenu.
+* Gone (his word): the stamp "NORMALISED, and the y caption does not
+  say so", which a typed y caption on a normalised figure put on the plot
+  and every export. A typed caption is the user's.
+
+## Round 6 (2026-10-05): settings windows in order, family-wide
+
+Christian, with two screenshots (a region's "Spectra" list, a band
+marker's "Arrow colour"): text boxes at the top of their pop-ups, the rows
+in an intuitive order - what is most likely edited after making the
+object, and what only the window can edit, first; text and colour very
+high. Asked: why a region has a spectra list (it is what a MAGNIFYING
+region magnifies - one class for highlight and magnify), and why band
+markers have arrow rows (labels, notes and markers share `LabelSettings`;
+the rows belonged to notes). His word: all three panels, the arrow rows
+off band markers, the proposed order.
+
+* `_LiveDialog.FIRST_ROWS` / `LAST_ROWS` / `row_order()`, applied by
+  `_buttons` through `order_rows`. Orders: band marker Text, Line at,
+  Colour...; note Text, Colour, the arrow...; label Text, Colour, Size...,
+  Leader arrow; region Text, From, Colour, Shade...; distance arrow Text,
+  Colour, From, To...; analysis Label, Shows, Colour, Number format,
+  Model...; offset marker Number format, Colour...; structure SMILES,
+  Colour...; caption Text, Shows, Size...; Show and Layer last.
+* A note's rows are shown only while it is a note (they were greyed);
+  never on a band marker. A region's curve list only while it magnifies.
+* Test: `test_settings_windows_put_the_text_and_the_colour_first` in
+  `tests/test_family.py`, and the region's in `tests/test_dialogs.py`.
+
 ## Next (suggested; Christian decides)
 
 - Git: initialise and push (his call).

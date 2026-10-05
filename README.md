@@ -29,15 +29,15 @@ with it. Version 0.2.0; "IR-Panel" is a working title. What changed is in
   nothing happens (2200 to 1800 cm-1, say) squeezed to a seam marked by
   slashes, the width given to the fingerprint region instead.
 - **Transmittance or absorbance**, converted (A = -log10 T) whichever the
-  file holds. A file that does not say which it holds - a bare two-column
+  file holds (F3, or double-click the y caption: "Shows"). A file that does not say which it holds - a bare two-column
   text - is guessed from its data, and the guess is said as one wherever
   the unit is shown; tell it otherwise in the file's settings.
 - **Normalisation, said on the axis.** All the spectra together 0 to 1
   (where a figure starts: the lowest value of any is 0, the highest of any
   1, so their depths keep their proportions, and a spectrum opened or
   hidden rescales the rest), each spectrum 0 to 1, each spectrum's chosen
-  band to the same strength, or none - F3, or a tick on the plot's
-  right-click menu for "all together". The y caption says "(normalised)"
+  band to the same strength, or none - F3, or the plot's right-click
+  menu, Normalise: None, Individual, Global or To a band. The y caption says "(normalised)"
   whenever it is on. Changing the unit or the normalisation keeps the
   stack's arrangement.
 - **The stack is continuous.** Spectra go wherever you put them (`G`, or

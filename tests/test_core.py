@@ -111,12 +111,14 @@ def test_a_band_a_spectrum_does_not_reach_says_so(document):
                for line in export.warnings_for(document))
 
 
-def test_a_retyped_caption_on_a_normalised_axis_is_a_warning(document):
+def test_a_typed_caption_on_a_normalised_axis_is_never_stamped(document):
+    """A caption the user typed is theirs: nothing is stamped on the
+    figure about what it says (Christian, 2026-10-05). It used to be
+    "NORMALISED, and the y caption does not say so"."""
     document.norm = units.NORM_RANGE
     document.axes["y"].label = "Transmittance  /  %"
-    assert any("NORMALISED" in line for line in export.warnings_for(document))
-    document.axes["y"].label = "Transmittance (normalised)"
     assert not export.warnings_for(document)
+    assert document.axes["y"].caption(document) == "Transmittance  /  %"
 
 
 def test_a_change_of_unit_keeps_the_stack_in_order(document):
