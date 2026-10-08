@@ -63,3 +63,19 @@ def name_label_corner(doc=None):
     if getattr(doc, "y_unit", units.UNIT_T) == units.UNIT_T:
         return "upper left"
     return "lower left"
+
+
+def details(sample):
+    """`[(what, value), ...]`: what `sample`'s file says of itself, for
+    "Details..." - the facts that tell two files of one name apart."""
+    import numpy as np
+    rows = [("Values", sample.unit_text())]
+    for key, value in sorted((sample.head or {}).items()):
+        if value not in (None, ""):
+            rows.append((str(key)[:1].upper() + str(key)[1:], str(value)))
+    x = np.asarray(sample.x, dtype=float)
+    rows.append(("Points", str(len(x))))
+    if len(x):
+        rows.append(("From - to", "{:g} - {:g}".format(float(np.nanmax(x)),
+                                                       float(np.nanmin(x)))))
+    return rows

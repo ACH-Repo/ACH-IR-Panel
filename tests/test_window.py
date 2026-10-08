@@ -538,3 +538,43 @@ def test_the_y_captions_window_changes_the_unit(window):
     window.edit_object(window.doc.axes["x"], part="caption")
     assert window._dialogs[-1].quantity is None
     window._dialogs[-1].close()
+
+
+def test_a_missing_file_keeps_its_region_curves_and_the_spans_ends(window):
+    """A file the session cannot read keeps its labels aside: a span's
+    ends (labels by their places) and a region's curves (by their files)
+    still name the right ones, and saving puts back what it had."""
+    import copy
+    doc, plot = window.doc, window.plot
+    rect = plot.plot_rect()
+    first, second = doc.scans[0], doc.scans[1]
+    doc.add_label("on the first", 0.5, 0.5, first)
+    a = window.add_marker_line(text="a", at=QPointF(plot.x_to_px(1562.0, rect),
+                                                    rect.center().y()))
+    b = window.add_marker_line(text="b", at=QPointF(plot.x_to_px(1380.0, rect),
+                                                    rect.center().y()))
+    doc.select_only([a, b])
+    span = window.add_span_between()
+    assert span.ends == [a, b]
+    window.add_region(600.0, 900.0, scans=[first, second])
+    state = session.to_state(doc)
+    lost = first.sample.path
+
+    def read(path):
+        if path == lost:
+            raise IOError("no such file")
+        twin = copy.copy([s for s in doc.samples if s.path == path][0])
+        twin.scans = []
+        return twin
+
+    opened, problems = session.from_state(state, "", read)
+    assert [g.path for g in opened.missing] == [lost]
+    assert [lb.text for lb in opened.spans[0].ends] == ["a", "b"]
+    region = opened.regions[0]
+    assert [s.sample.path for s in region.scans] == [second.sample.path]
+    assert region.kept_scans == [lost]
+    again = session.to_state(opened)
+    assert again["labels"] == state["labels"]
+    assert again["spans"] == state["spans"]
+    assert sorted(again["regions"][0]["scans"]) == sorted(
+        state["regions"][0]["scans"])
